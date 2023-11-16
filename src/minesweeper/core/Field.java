@@ -88,7 +88,16 @@ public class Field {
      * @param column column number
      */
     public void markTile(int row, int column) {
-        throw new UnsupportedOperationException("Method markTile not yet implemented");
+        Tile t = tiles[row][column];
+        /*
+        V pripade, ze je to stav OPEN, neurobi sa nic.
+        Podla diagramu prechodu stavov sa z tohto stavu uz nikam nema ist.
+         */
+        if(t.getState() == Tile.State.CLOSED) {
+            t.setState(Tile.State.MARKED);
+        } else if(t.getState() == Tile.State.MARKED) {
+            t.setState(Tile.State.CLOSED);
+        }
     }
 
     /**
