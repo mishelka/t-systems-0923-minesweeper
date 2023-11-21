@@ -17,7 +17,7 @@ public class Clue  extends Tile {
 
     @Override
     public String toString() {
-        if(this.getState() == State.OPEN) {
+        if(getState() == State.OPEN) {
             return String.valueOf(value);
         } else return super.toString();
     }

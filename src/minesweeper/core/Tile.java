@@ -36,7 +36,7 @@ public abstract class Tile {
 
     @Override
     public String toString() {
-        if(this.getState() == State.MARKED) {
+        if(getState() == State.MARKED) {
             return "M";
         } else {
             return "-";
