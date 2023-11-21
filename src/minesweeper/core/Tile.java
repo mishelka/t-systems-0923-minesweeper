@@ -33,4 +33,13 @@ public abstract class Tile {
     void setState(State state) {
         this.state = state;
     }
+
+    @Override
+    public String toString() {
+        if(this.getState() == State.MARKED) {
+            return "M";
+        } else {
+            return "-";
+        }
+    }
 }

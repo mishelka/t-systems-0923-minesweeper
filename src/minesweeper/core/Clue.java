@@ -14,4 +14,11 @@ public class Clue  extends Tile {
     public Clue(int value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        if(this.getState() == State.OPEN) {
+            return String.valueOf(value);
+        } else return super.toString();
+    }
 }

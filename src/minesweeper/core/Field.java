@@ -50,13 +50,34 @@ public class Field {
         markTile(4, 4);
         printField();
         openTile(5, 7);
+        openTile(5, 8);
+        openTile(4, 7);
+        openTile(6, 7);
+        openTile(5, 6);
+        printField();
+        markTile(4, 4);
         printField();
     }
 
     private void printField() {
-        System.out.println(tiles[5][5]);
-        //for pre riadky, for pre sltpce
-        //System.out.println(tiles[row][col]);
+        //formatovany vypis
+        String format = "%3s";
+        if(columnCount >= 100) {
+            format = "%4s";
+        }
+        System.out.printf("%3s", "");
+        for (int c = 0; c < columnCount; c++) {
+            System.out.printf(format, c);
+        }
+        System.out.println();
+        for (int r = 0; r < rowCount; r++) {
+            System.out.print(r);
+            System.out.printf("%2s", "");
+            for (int c = 0; c < columnCount; c++) {
+                System.out.printf(format, tiles[r][c]);
+            }
+            System.out.println();
+        }
     }
 
     /**
@@ -74,10 +95,10 @@ public class Field {
                 return;
             }
 
-            if (isSolved()) {
-                state = GameState.SOLVED;
-                return;
-            }
+//            if (isSolved()) {
+//                state = GameState.SOLVED;
+//                return;
+//            }
         }
     }
 
@@ -104,12 +125,32 @@ public class Field {
      * Generates playing field.
      */
     private void generate() {
+        generateMines();
+        generateClues();
+    }
+
+    private void generateMines() {
         Random random = new Random();
+        int m = 0;
 
-        int randomRow = random.nextInt(rowCount);
-        int randomCol = random.nextInt(columnCount);
+        while (m < mineCount) {
+            int r = random.nextInt(rowCount);
+            int c = random.nextInt(columnCount);
+            if (tiles[r][c] == null) {
+                tiles[r][c] = new Mine();
+                m++;
+            }
+        }
+    }
 
-        //spravit vkladanie min
+    private void generateClues() {
+        for (int r = 0; r < rowCount; r++) {
+            for (int c = 0; c < columnCount; c++) {
+                if (tiles[r][c] == null) {
+                    tiles[r][c] = new Clue(countAdjacentMines(r,c));
+                }
+            }
+        }
     }
 
     /**
