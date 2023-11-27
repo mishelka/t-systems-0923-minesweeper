@@ -1,5 +1,6 @@
 package minesweeper.core;
 
+import java.util.Formatter;
 import java.util.Random;
 
 /**
@@ -44,40 +45,40 @@ public class Field {
         this.mineCount = mineCount;
         tiles = new Tile[rowCount][columnCount];
 
-        //generate the field content
+//        //generate the field content
         generate();
-        printField();
-        markTile(4, 4);
-        printField();
-        openTile(5, 7);
-        openTile(5, 8);
-        openTile(4, 7);
-        openTile(6, 7);
-        openTile(5, 6);
-        printField();
-        markTile(4, 4);
-        printField();
+
+//        printField();
+//        markTile(4, 4);
+//        printField();
+//        openTile(5, 7);
+//        openTile(5, 8);
+//        openTile(4, 7);
+//        openTile(6, 7);
+//        openTile(5, 6);
+//        printField();
+//        markTile(4, 4);
+//        printField();
     }
 
-    private void printField() {
-        //formatovany vypis
-        String format = "%3s";
-        if(columnCount >= 100) {
-            format = "%4s";
-        }
-        System.out.printf("%3s", "");
+    public String toString() {
+        Formatter f = new Formatter(); //ma v sebe StringBuilder
+        //[     1   2   3   4   5 \n 1   -   -   -   -   -   - ....]
+
+        f.format("%3s", ""); //pri StringBuilder je to append, pri Formatter sa to vola format
         for (int c = 0; c < columnCount; c++) {
-            System.out.printf(format, c);
+            f.format("%3s", c);
         }
-        System.out.println();
+        f.format("\n");
         for (int r = 0; r < rowCount; r++) {
-            System.out.print(r);
-            System.out.printf("%2s", "");
+            f.format("%3s", (char)(r+65));
             for (int c = 0; c < columnCount; c++) {
-                System.out.printf(format, tiles[r][c]);
+                f.format("%3s", tiles[r][c]);
             }
-            System.out.println();
+            f.format("\n");
         }
+
+        return f.toString();
     }
 
     /**

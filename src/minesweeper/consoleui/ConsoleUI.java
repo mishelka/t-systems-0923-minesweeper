@@ -36,7 +36,9 @@ public class ConsoleUI {
         do {
             update();
             processInput();
-            throw new UnsupportedOperationException("Resolve the game state - winning or loosing condition.");
+
+            //if hra vyrata, tak vypis vyhral si a ukonci hru
+            //if hra prehrata, tak vypis prehral si a ukonci hru
         } while(true);
     }
     
@@ -44,7 +46,7 @@ public class ConsoleUI {
      * Updates user interface - prints the field.
      */
     public void update() {
-        throw new UnsupportedOperationException("Method update not yet implemented");
+        System.out.println(field);
     }
     
     /**
@@ -52,6 +54,13 @@ public class ConsoleUI {
      * Reads line from console and does the action on a playing field according to input string.
      */
     private void processInput() {
-        throw new UnsupportedOperationException("Method processInput not yet implemented");
+        String input = readLine();
+        System.out.println("Pouzivatel napisal: " + input);
+
+        if(input.startsWith("O")) {
+            field.openTile(5, 5);
+        } else if (input.startsWith("M")) {
+            field.markTile(1, 5);
+        }
     }
 }
