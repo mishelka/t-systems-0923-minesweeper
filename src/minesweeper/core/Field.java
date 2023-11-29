@@ -96,10 +96,10 @@ public class Field {
                 return;
             }
 
-//            if (isSolved()) {
-//                state = GameState.SOLVED;
-//                return;
-//            }
+            if (isSolved()) {
+                state = GameState.SOLVED;
+                return;
+            }
         }
     }
 
@@ -160,7 +160,21 @@ public class Field {
      * @return true if game is solved, false otherwise
      */
     private boolean isSolved() {
-        throw new UnsupportedOperationException("Method isSolved not yet implemented");
+        return ((columnCount * rowCount) - getNumberOf(Tile.State.OPEN)) == mineCount;
+    }
+
+    private int getNumberOf(Tile.State state) {
+        int count = 0;
+
+        for (int r = 0; r < rowCount; r++) {
+            for (int c = 0; c < columnCount; c++) {
+                if(tiles[r][c].getState() == state) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
     }
 
     /**

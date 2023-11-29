@@ -59,6 +59,7 @@ public class ConsoleUI {
 
         if(input.startsWith("O")) {
             field.openTile(5, 5);
+            //ukoncenie programu: System.exit(0);
         } else if (input.startsWith("M")) {
             field.markTile(1, 5);
         }
