@@ -55,6 +55,13 @@ public class ConsoleUI {
      */
     private void processInput() {
         String input = readLine();
+        //"(O|M)(A)(62)", "MB25" "X"
+        //zadefinovat regular ako Pattern
+        //matcherom matchnut input:
+        // matcher.matches(input);
+        //ziskat suradnice, napr. cislo stlpca:
+        //int col = Integer.parseInt(matcher.group(3));
+
         System.out.println("Pouzivatel napisal: " + input);
 
         if(input.startsWith("O")) {
