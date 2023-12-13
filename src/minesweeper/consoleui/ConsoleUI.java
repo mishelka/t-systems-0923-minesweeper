@@ -19,7 +19,7 @@ public class ConsoleUI {
     /** Input reader. */
     private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-    Pattern pattern = Pattern.compile("(O|M)([A-Z])([1-9]+)");
+    Pattern MINES_INPUT_PATTERN = Pattern.compile("(O|M)([A-Z])([1-9]+)");
     
     /**
      * Reads line of text from the reader.
@@ -70,28 +70,53 @@ public class ConsoleUI {
     private void processInput() {
         System.out.println("Please enter your selection (X) EXIT, (MA1) MARK, (OB4) OPEN: ");
         String input = readLine().trim().toUpperCase(); //trim oseka medzery na zaciatku a konci retazca; toUpperCase zabezpeci, ze vstup sa bude dat zadavat aj malymi pismenami
+
         switch(input.charAt(0)) {
             case 'X':
                 System.out.println("Dovidenia");
                 System.exit(0);
                 break;
             case 'O': case 'M':
-                Matcher m = pattern.matcher(input);
-                if(m.matches()) {
-                    int row = m.group(2).charAt(0) - 65;
-                    int col = Integer.parseInt(m.group(3)) - 1;
-                    switch(m.group(1)) {
-                        case "O": field.openTile(row, col);
-                        case "M": field.markTile(row, col);
-                    }
-                }
+                //try {
+                    handleInput(input);
+                //} catch (WrongFormatException e) {
+                    //vypiseme chyby cez System.out.err
+                //}
                 break;
             default:
                 System.out.println("Nesprávny vstup.");
         }
     }
 
-    private void handleInput() {
+    private void handleInput(String playerInput) { //throws WrongFormatException {
+        Matcher m = MINES_INPUT_PATTERN.matcher(playerInput);
+        if(!m.matches()) {
+            //throw new ...
+        }
 
+        int row = m.group(2).charAt(0) - 65;
+        int col = Integer.parseInt(m.group(3)) - 1;
+        char operation = m.group(1).charAt(0); //O alebo M
+
+        if(!isInputInBorderOfField(row, col)) {
+            //throw new ...
+        }
+
+        doOperation(operation, row, col);
+    }
+
+    private void doOperation(char operation, int row, int col) {
+        if (operation == 'M') {
+            field.markTile(row, col);
+        }
+
+        if (operation == 'O') {
+            field.openTile(row, col);
+        }
+    }
+
+    private boolean isInputInBorderOfField(int row, int col) {
+        //kontroluje, ci nevybiehame z pola, vracia true alebo false podla toho, ci ano alebo nie
+        return true;
     }
 }
