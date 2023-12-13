@@ -61,7 +61,6 @@ public class ConsoleUI {
      */
     public void update() {
         System.out.println(field);
-        System.out.println("Please enter your selection (X) EXIT, (MA1) MARK, (OB4) OPEN: ");
     }
     
     /**
@@ -69,6 +68,7 @@ public class ConsoleUI {
      * Reads line from console and does the action on a playing field according to input string.
      */
     private void processInput() {
+        System.out.println("Please enter your selection (X) EXIT, (MA1) MARK, (OB4) OPEN: ");
         String input = readLine().trim().toUpperCase(); //trim oseka medzery na zaciatku a konci retazca; toUpperCase zabezpeci, ze vstup sa bude dat zadavat aj malymi pismenami
         switch(input.charAt(0)) {
             case 'X':
@@ -89,5 +89,9 @@ public class ConsoleUI {
             default:
                 System.out.println("Nesprávny vstup.");
         }
+    }
+
+    private void handleInput() {
+
     }
 }
