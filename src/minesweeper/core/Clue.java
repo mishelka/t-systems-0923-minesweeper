@@ -15,6 +15,10 @@ public class Clue  extends Tile {
         this.value = value;
     }
 
+    public int getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
         if(getState() == State.OPEN) {

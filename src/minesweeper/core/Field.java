@@ -1,5 +1,6 @@
 package minesweeper.core;
 
+import java.sql.SQLOutput;
 import java.util.Formatter;
 import java.util.Random;
 
@@ -67,7 +68,7 @@ public class Field {
 
         f.format("%3s", ""); //pri StringBuilder je to append, pri Formatter sa to vola format
         for (int c = 0; c < columnCount; c++) {
-            f.format("%3s", c);
+            f.format("%3s", (c + 1));
         }
         f.format("\n");
         for (int r = 0; r < rowCount; r++) {
@@ -85,12 +86,17 @@ public class Field {
      * Opens tile at specified indeces.
      *
      * @param row    row number
-     * @param column column number
+     * @param col column number
      */
-    public void openTile(int row, int column) {
-        Tile tile = tiles[row][column];
+    public void openTile(int row, int col) {
+        Tile tile = tiles[row][col];
         if (tile.getState() == Tile.State.CLOSED) {
+
             tile.setState(Tile.State.OPEN);
+            if(tile instanceof Clue && ((Clue)tile).getValue() == 0) {
+                openAdjacentTiles(row, col);
+            }
+
             if (tile instanceof Mine) {
                 state = GameState.FAILED;
                 return;
@@ -103,14 +109,28 @@ public class Field {
         }
     }
 
+    private void openAdjacentTiles(int row, int col) {
+        for (int rowOffset = -1; rowOffset <= 1; rowOffset++) {
+            int actRow = row + rowOffset;
+            if (actRow >= 0 && actRow < rowCount) {
+                for (int colOffset = -1; colOffset <= 1; colOffset++) {
+                    int actCol = col + colOffset;
+                    if (actCol >= 0 && actCol < columnCount) {
+                        openTile(actRow, actCol);
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Marks tile at specified indeces.
      *
      * @param row    row number
-     * @param column column number
+     * @param col column number
      */
-    public void markTile(int row, int column) {
-        Tile t = tiles[row][column];
+    public void markTile(int row, int col) {
+        Tile t = tiles[row][col];
         /*
         V pripade, ze je to stav OPEN, neurobi sa nic.
         Podla diagramu prechodu stavov sa z tohto stavu uz nikam nema ist.
@@ -201,5 +221,9 @@ public class Field {
         }
 
         return count;
+    }
+
+    public GameState getState() {
+        return state;
     }
 }

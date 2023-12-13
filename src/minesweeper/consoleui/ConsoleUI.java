@@ -3,7 +3,11 @@ package minesweeper.consoleui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import minesweeper.core.Field;
+import minesweeper.core.GameState;
 
 /**
  * Console user interface.
@@ -14,6 +18,8 @@ public class ConsoleUI {
     
     /** Input reader. */
     private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+
+    Pattern pattern = Pattern.compile("(O|M)([A-Z])([1-9]+)");
     
     /**
      * Reads line of text from the reader.
@@ -37,9 +43,17 @@ public class ConsoleUI {
             update();
             processInput();
 
-            //if hra vyrata, tak vypis vyhral si a ukonci hru
-            //if hra prehrata, tak vypis prehral si a ukonci hru
-        } while(true);
+            if(field.getState() == GameState.SOLVED) {
+                System.out.println(field.toString());
+                System.out.println("Vyhral si!");
+            }
+            if(field.getState() == GameState.FAILED) {
+                System.out.println(field.toString());
+                System.out.println("Prehral si!");
+            }
+
+            //dobrovolne: zacatie novej hry v pripade, ze pouzivatel prehral alebo vyhral
+        } while(field.getState() == GameState.PLAYING);
     }
     
     /**
@@ -47,6 +61,7 @@ public class ConsoleUI {
      */
     public void update() {
         System.out.println(field);
+        System.out.println("Please enter your selection (X) EXIT, (MA1) MARK, (OB4) OPEN: ");
     }
     
     /**
@@ -54,21 +69,25 @@ public class ConsoleUI {
      * Reads line from console and does the action on a playing field according to input string.
      */
     private void processInput() {
-        String input = readLine();
-        //"(O|M)(A)(62)", "MB25" "X"
-        //zadefinovat regular ako Pattern
-        //matcherom matchnut input:
-        // matcher.matches(input);
-        //ziskat suradnice, napr. cislo stlpca:
-        //int col = Integer.parseInt(matcher.group(3));
-
-        System.out.println("Pouzivatel napisal: " + input);
-
-        if(input.startsWith("O")) {
-            field.openTile(5, 5);
-            //ukoncenie programu: System.exit(0);
-        } else if (input.startsWith("M")) {
-            field.markTile(1, 5);
+        String input = readLine().trim().toUpperCase(); //trim oseka medzery na zaciatku a konci retazca; toUpperCase zabezpeci, ze vstup sa bude dat zadavat aj malymi pismenami
+        switch(input.charAt(0)) {
+            case 'X':
+                System.out.println("Dovidenia");
+                System.exit(0);
+                break;
+            case 'O': case 'M':
+                Matcher m = pattern.matcher(input);
+                if(m.matches()) {
+                    int row = m.group(2).charAt(0) - 65;
+                    int col = Integer.parseInt(m.group(3)) - 1;
+                    switch(m.group(1)) {
+                        case "O": field.openTile(row, col);
+                        case "M": field.markTile(row, col);
+                    }
+                }
+                break;
+            default:
+                System.out.println("Nesprávny vstup.");
         }
     }
 }
