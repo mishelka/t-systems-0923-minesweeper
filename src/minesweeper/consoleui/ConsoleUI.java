@@ -77,29 +77,30 @@ public class ConsoleUI {
                 System.exit(0);
                 break;
             case 'O': case 'M':
-                //try {
+                try {
                     handleInput(input);
-                //} catch (WrongFormatException e) {
-                    //vypiseme chyby cez System.out.err
-                //}
+                } catch (WrongFormatException e) {
+                    System.err.println(e.getMessage() + "\nPlease try again.");
+                }
                 break;
-            default:
-                System.out.println("Nesprávny vstup.");
+            default: ;
+                System.err.println("Wrong input, please try again.");
         }
     }
 
-    private void handleInput(String playerInput) { //throws WrongFormatException {
+    private void handleInput(String playerInput) throws WrongFormatException {
         Matcher m = MINES_INPUT_PATTERN.matcher(playerInput);
         if(!m.matches()) {
-            //throw new ...
+            throw new WrongFormatException("The input is in a wrong format.");
         }
 
         int row = m.group(2).charAt(0) - 65;
         int col = Integer.parseInt(m.group(3)) - 1;
         char operation = m.group(1).charAt(0); //O alebo M
 
+        //System.out.println(row + " " + col);
         if(!isInputInBorderOfField(row, col)) {
-            //throw new ...
+            throw new WrongFormatException("Maximum row id is " + (char)(field.getRowCount() + 64) + " and maximum column id is " + field.getColumnCount());
         }
 
         doOperation(operation, row, col);
@@ -116,7 +117,8 @@ public class ConsoleUI {
     }
 
     private boolean isInputInBorderOfField(int row, int col) {
-        //kontroluje, ci nevybiehame z pola, vracia true alebo false podla toho, ci ano alebo nie
+        if(row < 0 || row >= field.getRowCount()) return false;
+        if(col < 0 || col >= field.getColumnCount()) return false;
         return true;
     }
 }

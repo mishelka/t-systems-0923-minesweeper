@@ -226,4 +226,12 @@ public class Field {
     public GameState getState() {
         return state;
     }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public int getColumnCount() {
+        return columnCount;
+    }
 }
